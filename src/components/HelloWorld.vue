@@ -2,21 +2,99 @@
 defineProps({
   msg: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
+    Tạo một button trên livechat
+    <button @click="createConnectionHelpDesk">Test mình đi</button>
   </div>
 </template>
+<script>
+import * as CustomerSDK from '@livechat/customer-sdk'
+import * as HelpDesk from "@livechat/helpdesk-sdk";
+export default {
+  data() {
+    return {
+      user: null,
+    };
+  },
+  methods: {
+    createConnectionTicket() {
+      const TOKEN = "dal:MDwUwBSgRpZavVgDU3PVwULDrNE";
+      const BASE64TOKEN =
+        "NTIyZDA1NmItMDRkYS00ZDQ5LWJjNmEtY2YxMTU2ZjA1ZmFlOmRhbDpNRHdVd0JTZ1JwWmF2VmdEVTNQVndVTERyTkU=";
+      console.log(this.test);
+      const LICENSE_ID = 14037057;
+      const CLIENT_ID = "10a0d0a52a3d1dbcc63906eb5c6e9198";
+      const CLIENT_SECRET = "17c9b6fb48de3c3a3d639b7cd7bcbb66d9a1e6bb";
+      const customerSDK = CustomerSDK.init({
+        licenseId: LICENSE_ID,
+        clientId: CLIENT_ID,
+        autoConnect: false,
+      });
+      customerSDK.connect();
+      customerSDK
+        .sendTicketForm({
+          groupId: 5,
+          filledForm: {
+            type: "filled_form",
+            formId: "",
+            fields: [
+              {
+                type: "subject",
+                id: "0",
+                label: "Subject:",
+                answer: "Order number 123",
+              },
+              {
+                type: "email",
+                id: "1",
+                label: "Your email:",
+                answer: "john.doe@example.com",
+              },
+              {
+                type: "checkbox",
+                id: "2",
+                label: "Question:",
+                answers: [
+                  { id: "0", label: "First answer" },
+                  { id: "1", label: "Second answer" },
+                ],
+              },
+              {
+                type: "textarea",
+                id: "3",
+                label: "Your message:",
+                answer:
+                  "Could I get a status update on this order? Have you already shipped it?",
+              },
+            ],
+          },
+        })
+        .then((response) => {
+          console.log(`Created a ticket with id: ${response.id}`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    createConnectionHelpDesk(){
+      console.log(`Created a ticket with id:`)
+      HelpDesk.createDetailsWidget().then((widget) => {
+        console.log('test');
+        console.log(widget);
+      })
+    }
+  },
+  created() {
+    // this.createConnection();
+  },
+};
+</script>
 
 <style scoped>
 h1 {
