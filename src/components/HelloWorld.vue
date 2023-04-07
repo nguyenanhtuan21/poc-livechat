@@ -1,12 +1,3 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true,
-  },
-});
-</script>
-
 <template>
   <div class="greetings">
     Tạo một button trên livechat
@@ -14,7 +5,7 @@ defineProps({
   </div>
 </template>
 <script>
-import * as CustomerSDK from '@livechat/customer-sdk'
+import * as CustomerSDK from "@livechat/customer-sdk";
 import * as HelpDesk from "@livechat/helpdesk-sdk";
 export default {
   data() {
@@ -38,57 +29,21 @@ export default {
       });
       customerSDK.connect();
       customerSDK
-        .sendTicketForm({
-          groupId: 5,
-          filledForm: {
-            type: "filled_form",
-            formId: "",
-            fields: [
-              {
-                type: "subject",
-                id: "0",
-                label: "Subject:",
-                answer: "Order number 123",
-              },
-              {
-                type: "email",
-                id: "1",
-                label: "Your email:",
-                answer: "john.doe@example.com",
-              },
-              {
-                type: "checkbox",
-                id: "2",
-                label: "Question:",
-                answers: [
-                  { id: "0", label: "First answer" },
-                  { id: "1", label: "Second answer" },
-                ],
-              },
-              {
-                type: "textarea",
-                id: "3",
-                label: "Your message:",
-                answer:
-                  "Could I get a status update on this order? Have you already shipped it?",
-              },
-            ],
-          },
-        })
-        .then((response) => {
-          console.log(`Created a ticket with id: ${response.id}`);
+        .getCustomer()
+        .then((customer) => {
+          console.log(customer);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    createConnectionHelpDesk(){
-      console.log(`Created a ticket with id:`)
+    createConnectionHelpDesk() {
+      console.log(`Created a ticket with id:`);
       HelpDesk.createDetailsWidget().then((widget) => {
-        console.log('test');
+        console.log("test");
         console.log(widget);
-      })
-    }
+      });
+    },
   },
   created() {
     // this.createConnection();
